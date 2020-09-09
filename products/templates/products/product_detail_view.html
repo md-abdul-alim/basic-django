@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block  content %}
+{% for product in products %}
+    {{product.id}}.{{product.title}}
+    <ul>
+        <li>{{product.description}}</li>
+        <li>{{product.price}}</li>
+        <li>{{product.summary}}</li>
+        <li>{{product.featured}}</li>
+        <a href="{{product.get_absolute_url}}">Delete</a>
+    </ul>
+{% endfor %}
+{% endblock %}

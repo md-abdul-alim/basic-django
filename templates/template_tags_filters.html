@@ -1,0 +1,307 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>About</h1>
+<!-- documentation for filtering data-> https://docs.djangoproject.com/en/3.1/ref/templates/builtins/-->
+<p>
+    {{my_text|capfirst}} <br> 
+    {{my_text|upper}} ,{{my_number}},{{this_is_true}} <br>
+    {{my_text|title}} <br>
+    {{title|title}} <br>
+    {{my_html|safe}}
+    {{my_html|striptags}} <br>
+    {{my_html|slugify}} <br>
+    {{my_html|striptags|slugify}} <br>
+    {{my_html|striptags|title}} <br>
+</p>
+<!-- ------------------------------------------------------------------------ -->
+<!--https://docs.djangoproject.com/en/3.1/ref/templates/builtins/#filter-->
+{% filter force_escape|lower %}
+This text will be HTML-escaped, and will appear in all Lowercase.
+{% endfilter %}
+<!-- ------------------------------------------------------------------------ -->
+<!-- https://docs.djangoproject.com/en/3.1/ref/templates/builtins/#for -->
+<ul>
+    {% for obj in my_list reversed %}
+    <li>{{ forloop.counter }}--{{ obj }}</li>
+    {% endfor %}
+</ul>
+<!-- ------------------------------------------------------------------------ -->
+<!-- https://docs.djangoproject.com/en/3.1/ref/templates/builtins/#for -->
+<ul>
+    {% for x, y, z in points %}
+    There is a point at ({{ x }},{{ y }},{{ z }}) <br>
+    {% endfor %}
+</ul>
+<!-- ------------------------------------------------------------------------ -->
+<!-- https://docs.djangoproject.com/en/3.1/ref/templates/builtins/#for -->
+{% for key, value in data.items %}
+{{ key }}: {{ value }} <br>
+{% endfor %}
+<!-- ------------------------------------------------------------------------ -->
+<!-- https://docs.djangoproject.com/en/3.1/ref/templates/builtins/#for-empty -->
+{% for athlete in empty_list %}
+<li>{{ athlete }}</li>
+{% empty %}
+<li>Sorry, no athletes in this list.</li>
+{% endfor %}
+<!-- ------------------------------------------------------------------------ -->
+{% comment %} https://docs.djangoproject.com/en/3.1/ref/templates/builtins/#if {% endcomment %}
+{% comment %} https://docs.djangoproject.com/en/3.1/ref/templates/builtins/#in-operator {% endcomment %}
+{% if "bc" in "abcdef" %}
+  This appears since "bc" is a substring of "abcdef"
+{% endif %}
+<br>
+{% if "ABC" in my_list %}
+  If my_list is a list or set, one element of which is the string
+  "ABC", this will appear.
+{% endif %}
+
+{% if user in users %}
+  If users is a QuerySet, this will appear if user is an
+  instance that belongs to the QuerySet.
+{% endif %}
+<!-- ------------------------------------------------------------------------ -->
+{% comment %} https://docs.djangoproject.com/en/3.1/ref/templates/builtins/#filters {% endcomment %}
+<br>
+{% if filters_list|length == 0 %}
+    You have {{filters_list|length}} of messages today!
+{% elif filters_list|length > 0 %}
+    You have {{filters_list|length}} of messages today!
+{% endif %}
+<!-- ------------------------------------------------------------------------ -->
+{% comment %} https://docs.djangoproject.com/en/3.1/ref/templates/builtins/#complex-expressions {% endcomment %}
+
+<!-- ------------------------------------------------------------------------ -->
+{% comment %} https://docs.djangoproject.com/en/3.1/ref/templates/builtins/#ifchanged {% endcomment %}
+{% for date in days %}
+    {% ifchanged %}
+    <h3>{{ date|date:"F" }}</h3>
+    {% endifchanged %}
+    <a href="{{ date|date:"M/d"|lower }}/">{{ date|date:"j" }}</a>
+{% endfor %}
+<!-- ------------------------------------------------------------------------ -->
+
+<hr>
+{% for value  in values %}
+    {% ifchanged value %}
+    <p>-----</p>
+    {% endifchanged %}
+    <li>{{value}}</li>
+{% endfor %}
+<hr>
+<!-- ------------------------------------------------------------------------ -->
+{% for dict_value  in dict_values %}
+    {% ifchanged dict_value.language %}
+    <p>-------------------</p>
+    {% endifchanged %}
+    <li>{{dict_value.name}} -- {{dict_value.language}}</li>
+{% endfor %}
+<hr>
+<!-- ------------------------------------------------------------------------ -->
+It is {% now "jS F Y H:i" %} <br>
+It is the {% now "jS \o\f F" %}<br>
+It is {% now "SHORT_DATETIME_FORMAT" %}<br>
+It is {% now "SHORT_DATE_FORMAT" %}<br>
+It is {% now "SHORT_FORMAT_DATETIME" %}<br>
+<hr>
+<!-- ------------------------------------------------------------------------ -->
+{% comment %} https://docs.djangoproject.com/en/3.1/ref/templates/builtins/#regroup {% endcomment %}
+{% regroup cities by country as country_list %}
+<ul>
+{% for country in country_list %}
+    <li>{{ country.grouper }}
+    <ul>
+        {% for city in country.list %}
+          <li>{{ city.name }}: {{ city.population }}</li>
+        {% endfor %}
+    </ul>
+    </li>
+{% endfor %}
+</ul>
+<hr>
+<!-- ------------------------------------------------------------------------ -->
+{% regroup cities|dictsort:"country" by country as country_list %}
+
+<ul>
+{% for country, local_cities in country_list %}
+    <li>{{ country }}
+    <ul>
+        {% for city in local_cities %}
+          <li>{{ city.name }}: {{ city.population }}</li>
+        {% endfor %}
+    </ul>
+    </li>
+{% endfor %}
+</ul>
+<hr>
+<!-- ------------------------------------------------------------------------ -->
+{% regroup cities by country.description as country_list %}
+
+<ul>
+{% for country, local_cities in country_list %}
+    <li>{{ country }}
+    <ul>
+        {% for city in local_cities %}
+          <li>{{ city.name }}: {{ city.population }}</li>
+        {% endfor %}
+    </ul>
+    </li>
+{% endfor %}
+</ul>
+<hr>
+<!-- ------------------------------------------------------------------------ -->
+
+<!-- ------------------------------------------------------------------------ -->
+
+<!-- ------------------------------------------------------------------------ -->
+<!--
+Variable	Description
+forloop.counter	The current iteration of the loop (1-indexed)
+forloop.counter0	The current iteration of the loop (0-indexed)
+forloop.revcounter	The number of iterations from the end of the loop (1-indexed)
+forloop.revcounter0	The number of iterations from the end of the loop (0-indexed)
+forloop.first	True if this is the first time through the loop
+forloop.last	True if this is the last time through the loop
+forloop.parentloop	For nested loops, this is the loop surrounding the current one
+-->
+<!-- ------------------------------------------------------------------------ -->
+<ul>
+    {% for my_sub_item in my_list %}
+    <!--<li>{{ my_sub_item}}</li>-->
+    <li>{{ forloop.parentloop }}--{{ my_sub_item}}</li>
+    {% endfor %}
+</ul>
+<p>------------------------------------</p>
+{% comment %} https://docs.djangoproject.com/en/3.1/ref/templates/builtins/#add {% endcomment %}
+<ul>
+    {% for abc in my_list %}
+    {% if abc == 159 %}
+    <li>{{ forloop.counter }}---{{ abc|add:22 }}</li>
+
+    {% endif %}
+    {% endfor %}
+</ul>
+<p>------------------------------------</p>
+<ul>
+    {% for abc in my_list %}
+    {% if abc == 158 %}
+    <li>{{ forloop.counter }}---{{ abc|add:22 }}</li>
+    {% else %}
+    <li>{{ forloop.counter }}---{{ abc }}</li>
+    {% endif %}
+    {% endfor %}
+</ul>
+<p>------------------------------------</p>
+<ul>
+    {% for abc in my_list %}
+    {% if abc == 158 %}
+    <li>{{ forloop.counter }}---{{ abc|add:22 }}</li>
+    {% elif abc == "ABC" %}
+    <li>ABC replace by EFG</li>
+    {% else %}
+    <li>{{ forloop.counter }}---{{ abc }}</li>
+    {% endif %}
+    {% endfor %}
+</ul>
+<!-- ------------------------------------------------------------------------ -->
+<ul>
+    {% for x, y, z in points %}
+    There is a point at ({{ x }},{{ y }},{{ z }}) <br>
+    {% endfor %}
+</ul>
+<!-- ------------------------------------------------------------------------ -->
+<hr>
+{% comment %} https://docs.djangoproject.com/en/3.1/ref/templates/builtins/#add {% endcomment %}
+<ul>
+    {{ first|add:second }}
+</ul>
+<!-- ------------------------------------------------------------------------ -->
+{% comment %} https://docs.djangoproject.com/en/3.1/ref/templates/builtins/#addslashes {% endcomment %}
+<ul>
+    {{addslashes|addslashes}}
+</ul>
+<!-- ------------------------------------------------------------------------ -->
+{% comment %} https://docs.djangoproject.com/en/3.1/ref/templates/builtins/#capfirst {% endcomment %}
+<ul>
+    {{capfirst1|capfirst }}
+</ul>
+<ul>
+    {{capfirst2|capfirst }}
+</ul>
+<!-- ------------------------------------------------------------------------ -->
+{% comment %} https://docs.djangoproject.com/en/3.1/ref/templates/builtins/#cut {% endcomment %}
+{{my_text|cut:" " }} <br>
+<!-- ------------------------------------------------------------------------ -->
+{% comment %} https://docs.djangoproject.com/en/3.1/ref/templates/builtins/#date {% endcomment %}
+{{ datetime|date:"D d M Y" }} <br>
+{{ datetime|date:"SHORT_DATE_FORMAT" }}<br>
+{{ datetime|date }}<br>
+{{ datetime|date:"D d M Y" }} -- {{ datetime|time:"H:i" }} <br>
+{{ datetime|time:"H:i" }} <br>
+{{ datetime|date:"l" }} <br>
+{{ datetime|date:"F" }} <br>
+{{ datetime|date:"t" }} ---Number of days in the given month<br>
+{{ datetime|date:"z" }} days <br>
+{{ datetime|date:"W" }} weeks<br>
+<p>Year</p>
+{{ datetime|date:"Y" }} Year, 4 digits<br>
+{{ datetime|date:"y" }} Year, 2 digits<br>
+{{ datetime|date:"L" }} ---Boolean for whether it’s a leap year.<br>
+{{ datetime|date:"o" }}<br>
+<p>Time</p>
+{{ datetime|time:"g i s" }}<br>
+{{ datetime|time:"g" }} hours {{ datetime|time:"i" }} minitues {{ datetime|time:"A" }}<br>
+{{ datetime|time:"G" }} hours {{ datetime|time:"i" }} minitues {{ datetime|time:"s" }} seconds {{ datetime|time:"u" }} Microseconds<br>
+{{ datetime|time:"g" }} hours {{ datetime|time:"i" }} minitues {{ datetime|time:"a" }}<br>
+{{ datetime|time:"f" }} {{ datetime|time:"A" }}<br>
+{{ datetime|time:"P" }}<br>
+<p>Timezone</p>
+
+{{ datetime|date:"I" }}<br>
+{{ datetime|date:"O" }}<br>
+{{ datetime|date:"T" }} Time zone of this machine.<br>
+{{ datetime|date:"Z" }}<br>
+
+<p>Date/Time</p>
+{{ datetime|date:"c" }}<br>
+{{ datetime|date:"r" }}<br>
+{{ datetime|date:"U" }}<br>
+<!-- ------------------------------------------------------------------------ -->
+{% comment %} https://docs.djangoproject.com/en/3.1/ref/templates/builtins/#default {% endcomment %}
+<p>default</p>
+{{empty_list|default:"nothing"}} <br>
+{{ empty_list|default_if_none:"nothing" }} <br>
+<!-- ------------------------------------------------------------------------ -->
+{% comment %} https://docs.djangoproject.com/en/3.1/ref/templates/builtins/#dictsort {% endcomment %}
+{% for book in books|dictsort:"author.age" %}
+    * {{ book.title }} ({{ book.author.name }}) <br>
+{% endfor %}
+<!-- ------------------------------------------------------------------------ -->
+{% comment %} https://docs.djangoproject.com/en/3.1/ref/templates/builtins/#filesizeformat {% endcomment %}
+{{ cities|filesizeformat }} <br>
+<!-- ------------------------------------------------------------------------ -->
+{{ my_list|first }} <br> 
+{% comment %} https://docs.djangoproject.com/en/3.1/ref/templates/builtins/#floatformat {% endcomment %}
+{{ my_number|floatformat:"0" }} <br>
+{{ my_number|floatformat:3 }}
+<!-- ------------------------------------------------------------------------ -->
+{% comment %} https://docs.djangoproject.com/en/3.1/ref/templates/builtins/#std:templatefilter-urlencode {% endcomment %}
+<p>Urlencode</p>
+{{ url|urlencode }} <br>
+{{ url|urlencode:"" }} <br>
+Click Here {{ url|urlize }} <br>
+{{ url|urlizetrunc:30 }} <br>
+<!-- ------------------------------------------------------------------------ -->
+<p>wordcount</p>
+Total {{ capfirst1|wordcount }} words<br>
+{{ capfirst1|wordwrap:5 }}
+<!-- ------------------------------------------------------------------------ -->
+<p>yesno</p>
+{{ yes|yesno:"yeah,no,maybe" }} <br>
+{{ no|yesno:"yeah,no,maybe" }} <br>
+{{ none|yesno:"yeah,no,maybe" }} <br>
+{{ none|yesno:"yeah,no" }} <br>
+<!-- ------------------------------------------------------------------------ -->
+
+<!-- ------------------------------------------------------------------------ -->
+{% endblock %}

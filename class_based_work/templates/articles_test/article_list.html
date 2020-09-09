@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% for instance in object_list %}
+
+    <p>{{instance.id}}-- <a href="{{instance.get_absolute_url}}">{{instance.title}}</a></p>
+    <a href="{% url 'articles:article-update' instance.id %}">Update</a>
+    <a href="{% url 'articles:article-delete' instance.id %}">Delete</a>
+    {% comment %} <a href="{% url 'articles:article-update' %}">Update</a> {% endcomment %}
+
+{% endfor %}
+
+{% endblock %}

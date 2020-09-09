@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <title>Basic Django</title>
+</head>
+
+<body>
+    <p><a href="https://www.youtube.com/playlist?list=PLEsfXFp6DpzTD1BD1aWNxS2Ep06vIkaeW">Tutorial Link</a></p>
+    {% include 'nav.html' %}
+    {% block content %}
+
+    {% endblock content %}
+    
+</body>
+
+</html>
