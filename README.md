@@ -1,7 +1,8 @@
 # basic-django
-# Django version : 3.1
-# Database : XAMPP Control Panel v3.2.2 (Default django database sqlite3 is on comment.If you want you can use that by comment out.)
-
+#
+Django version : 3.1
+Database : XAMPP Control Panel v3.2.2 (Default django database sqlite3 is on comment.If you want you can use that by comment out.)
+#
 This is a basic django project. Where i completed 3 types views.                                                                                                                       
     i) Function base views                                                                                                                                                                         
     ii) Class base views                                                                                                                                                                    
